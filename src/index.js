@@ -50,5 +50,14 @@ function renderToys(json) {
 
     const btnElem = document.createElement("button");
     btnElem.setAttribute("class", "like-btn");
+    btnElem.innerHTML = "Like";
+    divElem.appendChild(btnElem);
+
+    btnElem.addEventListener("click", onClickLike);
   });
+}
+const likes = 0;
+
+function onClickLike(event) {
+  const likeButton = event.currentTarget;
 }
