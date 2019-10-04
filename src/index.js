@@ -32,6 +32,23 @@ function fetchToys() {
 function renderToys(json) {
   const toyContainer = document.getElementById("toy-collection");
   json.forEach(toy => {
-    const elem = document.createElement("div");
+    const divElem = document.createElement("div");
+    divElem.setAttribute("class", "card");
+    toyContainer.appendChild(divElem);
+
+    const heading = document.createElement("h2");
+    divElem.appendChild(heading);
+
+    const image = document.createElement("img");
+    image.src = `${toy.image}`;
+    image.setAttribute("class", "toy-avatar");
+    divElem.appendChild(image);
+
+    const pElem = document.createElement("p");
+    pElem.innerHTML = "Likes";
+    divElem.appendChild(pElem);
+
+    const btnElem = document.createElement("button");
+    btnElem.setAttribute("class", "like-btn");
   });
 }
