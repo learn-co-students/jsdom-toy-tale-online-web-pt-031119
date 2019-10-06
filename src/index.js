@@ -17,6 +17,8 @@ addBtn.addEventListener("click", () => {
 // OR HERE!
 document.addEventListener("DOMContentLoaded", function() {
   fetchToys();
+  const addButton = document.getElementsByClassName("submit");
+  addButton[0].addEventListener("click", fetchAddToy);
 });
 
 function fetchToys() {
@@ -31,6 +33,7 @@ function fetchToys() {
 
 function renderToys(json) {
   const toyContainer = document.getElementById("toy-collection");
+  toyContainer.innerHTML = "";
   json.forEach(toy => {
     const divElem = document.createElement("div");
     divElem.setAttribute("class", "card");
@@ -45,19 +48,74 @@ function renderToys(json) {
     divElem.appendChild(image);
 
     const pElem = document.createElement("p");
-    pElem.innerHTML = "Likes";
+    pElem.id = `counter${toy.id}`;
+    pElem.innerHTML = `${toy.likes} Likes`;
     divElem.appendChild(pElem);
 
     const btnElem = document.createElement("button");
     btnElem.setAttribute("class", "like-btn");
     btnElem.innerHTML = "Like";
+    btnElem.setAttribute("id", `${toy.id}`);
     divElem.appendChild(btnElem);
 
     btnElem.addEventListener("click", onClickLike);
   });
 }
-const likes = 0;
 
 function onClickLike(event) {
   const likeButton = event.currentTarget;
+  const toyId = likeButton.id;
+  const counterLabel = document.getElementById(`counter${toyId}`);
+  let number = parseInt(counterLabel.innerHTML, 10);
+  number = isNaN(number) ? 0 : number;
+  number++;
+
+  fetchLikesPatch(number, toyId);
+}
+function fetchLikesPatch(likeNumber, toyId) {
+  let data = {
+    likes: likeNumber
+  };
+
+  let configObj = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify(data)
+  };
+
+  fetch(`http://localhost:4000/toys/${toyId}`, configObj).then(fetchToys);
+}
+
+function fetchAddToy(event) {
+  event.preventDefault();
+  inputsArray = document.getElementsByClassName("input-text");
+  console.log(inputsArray);
+  let data = {
+    name: inputsArray[0].value,
+    image: inputsArray[1].value,
+    likes: 0
+  };
+
+  let configObj = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify(data)
+  };
+
+  fetch("http://localhost:4000/toys", configObj)
+    .then(response => response.json())
+    .then(object => {
+      console.log(object);
+      fetchToys();
+    })
+    .catch(function(error) {
+      alert("Something went wrong!");
+      document.body.internalHtml = error.message;
+    });
 }
