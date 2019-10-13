@@ -3,10 +3,11 @@ const toyForm = document.querySelector('.container')
 let addToy = false
 let toyPost = document.querySelector("#toy-collection")
 
+
 document.addEventListener("DOMContentLoaded", () => {
  getToys()
  toyForm.addEventListener('submit',captureNewToy)
-
+ 
 }, false);
 
 
@@ -46,7 +47,31 @@ let postToy = (name = nil,imgUrl=nil) => {
           "likes": "10"
           })
         })
-        
+        .then(resp => resp.json())        
+        .then(json => createToy(json))
+}
+
+let updateLikes = (like) => {
+  console.log("updated the likes")
+  const id = parseInt(like.currentTarget.attributes[1].value)
+  const newLike = parseInt(like.target.previousElementSibling.innerText) + 1
+  
+  fetch(`http://localhost:3000/toys/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          "likes": `${newLike}`
+          })
+        })
+      
+
+
+
+
+  
 }
 
 
@@ -66,9 +91,9 @@ let renderToys = (toys) => {
   }
 }
 let createToy = (toy) => {
+  
   let div = document.createElement("div")
    div.setAttribute('class','card')
-
   let h2 = document.createElement("h2")
   h2.innerHTML = toy.name
   
@@ -81,6 +106,10 @@ let createToy = (toy) => {
   
   let btn = document.createElement("button")
     btn.setAttribute('class','like-button')
+    btn.setAttribute('data-id',`${toy.id}` )
+    btn.addEventListener("click", updateLikes)
  
   toyPost.appendChild(div).append(h2,img,p,btn)
+  
+  //document.querySelector(`[data-id=${toy.id}]`).addEventListener("click",updateLikes)
 }
