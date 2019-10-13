@@ -48,6 +48,6 @@ const fetchNewToy = (url, configObj) => {
                 toyCollectionDiv.appendChild(generateToyCard(toyObj))
             })
                 .catch(function(error) {
-                console.log(error.message)
+                    console.log(error.message)
                 })
 }
