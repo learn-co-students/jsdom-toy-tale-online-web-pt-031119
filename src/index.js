@@ -19,21 +19,21 @@ function submitData(name, image) {
 	  },
 	  body: JSON.stringify(formData)
 	};
-	return fetch("http://localhost:3000/toys", configObj)
+	fetch("http://localhost:3000/toys", configObj)
 	 .then(function(response) {
 		return response.json();
 		})
 		.then(function(object) {
-			createToy(object)	  	
+			createOneToy(object)	  	
 		})
 		.catch(function(error) {
-		    alert("There was an error with fetch!");
+			console.log(error)
+		    alert("There was an error with creating new toy!");
 		    console.log(error)
 		});
 }
 
-function createToy(object) {
-	debugger
+function createToys(object) {
 	  	for (const toy of object) {
 	  		let toy_div = document.createElement('div.card')
 		  		toy_collect.appendChild(toy_div)
@@ -54,13 +54,32 @@ function createToy(object) {
 	  	}	
 }
 
+function createOneToy(object) {
+	  		let toy_div = document.createElement('div.card')
+		  		toy_collect.appendChild(toy_div)
+		  		let h2 = document.createElement('h2')
+		  		h2.innerHTML = object.name
+		  		toy_div.appendChild(h2)
+		  		let img = document.createElement('img')
+		  		img.classList.add("toy-avatar")
+		  		img.src = object.image
+		  		toy_div.appendChild(img)
+		  		let p = document.createElement('p')
+		  		p.innerHTML = object.likes
+		  		toy_div.appendChild(p)
+		  		let button = document.createElement('button')
+		  		button.classList.add("like-btn")
+		  		button.innerHTML = "Like"
+		  		toy_div.appendChild(button)
+}	
+
 document.addEventListener('DOMContentLoaded', function() {   
-  return fetch("http://localhost:3000/toys")
+  fetch("http://localhost:3000/toys")
 	  .then(function(response) {
 	    return response.json();
 	  })
 	  .then(function(object) {
-	  	createToy(object)
+	  	createToys(object)
 	  })
 	  .catch(function(error) {
 	    alert("There was an error!");
@@ -73,10 +92,12 @@ addBtn.addEventListener('click', () => {
   addToy = !addToy
   if (addToy) {
     toyForm.style.display = 'block'
-    toyForm.addEventListener("submit", function(){
-    	const new_name = toy_form_fields[0]
-    	const new_image = toy_form_fields[1]
+    toyForm.addEventListener("submit", function(e){
+    	e.preventDefault()
+    	const new_name = toy_form_fields[0].value
+    	const new_image = toy_form_fields[1].value   
     	submitData(new_name, new_image)
+    	toyForm.style.display = 'none'
     });    
   } else {
     toyForm.style.display = 'none'
