@@ -18,7 +18,7 @@ createBtn.addEventListener('click', function newToy(){
   let formData = {
     name: toyName,
     image: toyImage,
-    likes: 0
+    likes: "0"
   };
   
   let configObj = {
@@ -27,15 +27,14 @@ createBtn.addEventListener('click', function newToy(){
       "Content-Type": "application/json",
       "Accept": "application/json"
     },
-    body: JSON.stringify(formData)
+    body: JSON.stringify({formData})
   };
   // debugger
+  
   fetch("http://localhost:3000/toys", configObj)
-  .then(function(response) {
-    //  debugger
-    return (response.json());
-  })
+  .then(response => response.json())
   .then(function(object) {
+    // debugger
     console.log(object);
   })
   .catch(function(error) {
