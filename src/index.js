@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function fetchToys() {
-  const toyUrl = "http://localhost:4000/toys";
+  const toyUrl = "http://localhost:3000/toys";
   fetch(toyUrl)
     .then(response => response.json())
     .then(json => {
@@ -86,7 +86,7 @@ function fetchLikesPatch(likeNumber, toyId) {
     body: JSON.stringify(data)
   };
 
-  fetch(`http://localhost:4000/toys/${toyId}`, configObj).then(fetchToys);
+  fetch(`http://localhost:3000/toys/${toyId}`, configObj).then(fetchToys);
 }
 
 function fetchAddToy(event) {
@@ -108,7 +108,7 @@ function fetchAddToy(event) {
     body: JSON.stringify(data)
   };
 
-  fetch("http://localhost:4000/toys", configObj)
+  fetch("http://localhost:3000/toys", configObj)
     .then(response => response.json())
     .then(object => {
       console.log(object);
@@ -116,6 +116,6 @@ function fetchAddToy(event) {
     })
     .catch(function(error) {
       alert("Something went wrong!");
-      document.body.internalHtml = error.message;
+      document.body.innerHtml = error.message;
     });
 }
