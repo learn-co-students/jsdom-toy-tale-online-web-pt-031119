@@ -7,41 +7,39 @@ let addToy = false
 
 // YOUR CODE HERE
 
-
- 
-
-
-createBtn.addEventListener('click', function newToy(){
-  let toyName = document.querySelectorAll('.input-text')[0].value
-  let toyImage = document.querySelectorAll('.input-text')[1].value
-
-  let formData = {
-    name: toyName,
-    image: toyImage,
-    likes: "0"
-  };
-  
-  let configObj = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
-    body: JSON.stringify({formData})
-  };
-  // debugger
-  
-  fetch("http://localhost:3000/toys", configObj)
-  .then(response => response.json())
-  .then(function(object) {
+createBtn.addEventListener('submit', function(e){
+  e.preventDefault();
+  console.log("test");
+    let toyName = document.querySelectorAll('.input-text')[0].value
     // debugger
-    console.log(object);
+    let toyImage = document.querySelectorAll('.input-text')[1].value
+
+    let formData = {
+        name: toyName,
+        image: toyImage,
+        likes: 0
+    };
+    
+    let options = {
+      method: "POST",
+      headers: {
+        'Content-Type': "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify(formData)
+    };  
+    // debugger
+    return fetch('http://localhost:3000/toys', options)
+
+    .then(response => console.log(response))
+    .then(function(object) {
+      renderToys(object);
+    })
+    .catch(function(error) {
+      console.log(error);
+      alert("not processed");
+    })
   })
-  .catch(function(error) {
-    alert("not processed");
-    console.log(error.message);
-  })
-})
 
 document.addEventListener('DOMContentLoaded', (event) => {
   fetchToys();
